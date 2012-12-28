@@ -1,6 +1,5 @@
 (function() {
   var jsk = {
-    ///// PROPERTIES
     dids : [],
     undids : [],
     // Can undo

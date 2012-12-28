@@ -1,5 +1,5 @@
 should = require 'should'
-undo = require '../src/jskata.undo.js'
+undo = require '../undone.js'
 {equal, ok} = require 'assert'
 
 jsk = {u:undo, undo:undo}

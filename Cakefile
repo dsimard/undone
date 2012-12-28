@@ -1,8 +1,10 @@
 {exec} = require 'child_process'
 path = require 'path'
+fs = require 'fs'
 {log, error} = console
+{minify} = require './node_modules/uglify-js'
 
-task 'doc', 'Generate doc in gh-pages branch', ->
+generateDoc = (done)->
   dir = path.resolve './'
   
   # Create a tmp directory
@@ -21,7 +23,7 @@ task 'doc', 'Generate doc in gh-pages branch', ->
         log stdout
         
         # Create doc        
-        exec 'docco-husky src/', (err, stdout, stderr)->
+        exec 'docco-husky undone.js', (err, stdout, stderr)->
           error err if err?
           log stdout
           
@@ -30,4 +32,28 @@ task 'doc', 'Generate doc in gh-pages branch', ->
             error err if err?
             log stdout
             
-            # Commit and push to gh-pages
+            # Commit to gh-pages
+            exec "git add . && git commit -am 'Generated automatically'", {cwd:tmp}, (err, stdout, stderr)->
+              error err if err?
+              log stdout
+              
+              # Push to gh-pages
+              ###
+              exec "git push origin gh-pages", {cwd:tmp}, (err, stdout, stderr)->
+                error err if err?
+                log stdout
+              ###
+
+task 'uglify', 'Uglify js file', ->
+  fs.readdir path.resolve('./'), (err, files)->
+    files.forEach (file)->
+      if path.extname(file) == '.js'
+        ugly = minify file    
+        minified = path.resolve("./#{path.basename file, '.js'}.min.js")
+        fs.writeFile minified, ugly.code, (err)->
+          throw err if err
+          log "#{minified} written!"
+
+task 'doc', 'Generate doc in gh-pages branch', ->
+  generateDoc()
+
