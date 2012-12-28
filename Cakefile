@@ -1,10 +1,10 @@
 {exec} = require 'child_process'
 path = require 'path'
 fs = require 'fs'
-{log, error} = console
+{log, error, dir} = console
 {minify} = require './node_modules/uglify-js'
 
-generateDoc = (done)->
+generateDoc = (pushDoc=true, done)->
   dir = path.resolve './'
   
   # Create a tmp directory
@@ -38,11 +38,10 @@ generateDoc = (done)->
               log stdout
               
               # Push to gh-pages
-              ###
-              exec "git push origin gh-pages", {cwd:tmp}, (err, stdout, stderr)->
-                error err if err?
-                log stdout
-              ###
+              if pushDoc
+                exec "git push origin gh-pages", {cwd:tmp}, (err, stdout, stderr)->
+                  error err if err?
+                  log stdout
 
 task 'uglify', 'Uglify js file', ->
   fs.readdir path.resolve('./'), (err, files)->
@@ -54,6 +53,9 @@ task 'uglify', 'Uglify js file', ->
           throw err if err
           log "#{minified} written!"
 
-task 'doc', 'Generate doc in gh-pages branch', ->
-  generateDoc()
+# Generate doc
+option '-p', '--no-push', "Don't push doc"
+task 'doc', 'Generate doc in gh-pages branch', (options)->
+  noPush = options['no-push']? && options['no-push']
+  generateDoc(!noPush)
 
