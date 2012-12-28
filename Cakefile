@@ -47,7 +47,7 @@ generateDoc = (done)->
 task 'uglify', 'Uglify js file', ->
   fs.readdir path.resolve('./'), (err, files)->
     files.forEach (file)->
-      if path.extname(file) == '.js'
+      if path.extname(file) == '.js' && file.indexOf('.min') < 0
         ugly = minify file    
         minified = path.resolve("./#{path.basename file, '.js'}.min.js")
         fs.writeFile minified, ugly.code, (err)->
