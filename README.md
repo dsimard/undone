@@ -1,45 +1,42 @@
-# jskata - independent javascript library
+# Undone
 
-[![Build Status](https://secure.travis-ci.org/dsimard/jskata.png?branch=2012-12-02_Node)](https://travis-ci.org/dsimard/jskata)
+## A do, undo and redo library in javascript
 
-## jskata.timezone
+[![Build Status](https://travis-ci.org/dsimard/timezonedetect.png?branch=master)](https://travis-ci.org/dsimard/timezonedetect)
 
-    if (jsk.tz.hasDaylightSavingTime()) {
-      console.log('You have daylight saving time in your timezone');
-    } else {
-      console.log('You DO NOT have daylight saving time in your timezone');
-    }
-
-    console.log('Your standard time zone offset in second is ' + jsk.tz.standardTime());
-    console.log('Your standard time zone offset is : ' + jsk.tz.standardTimeToString());
+    var add = function() { alert('Buy a cat'); }
+    var remove = function() { alert('Give a cat'); }
+    undone.execute(add, remove); // Alerts 'Buy a cat'
+    undone.undo(); // Alerts 'Give a cat'
+    undone.redo(); // Alerts 'Buy a cat'
     
-## jskata.undo
+See the complete documentation in [undone.js](http://dsimard.github.com/undone/undone.js.html)
 
-    if (jsk.tz.hasDaylightSavingTime()) {
-      console.log('You have daylight saving time in your timezone');
-    } else {
-      console.log('You DO NOT have daylight saving time in your timezone');
-    }
+## Install
 
-    console.log('Your standard time zone offset in second is ' + jsk.tz.standardTime());
-    console.log('Your standard time zone offset is : ' + jsk.tz.standardTimeToString());
+To __install for a website__, copy `undone.min.js` with the other javascript files of your project and include it.
 
-## Namespaces
 
-There are 4 different namespaces : `JavascriptKataDotCom`, `jskata`, `jsk` and `_`. `JavascriptKataDotCom` is the default. The others are used if they are not assigned.
+_(Later)_ To __install in a Node.js__ project `npm install timezonedetect`
 
-If you want to access _jsKata_ via another namespace : `window.MyNamespace = window.JavascriptKataDotCom;`
+## Contribute
 
-## Manifesto
+Give what you want to contribute to open-source : 
 
-- **No internal dependencies** : every library can be used independently “as is”.
-- **No external dependence** : don’t depend on external libraries.
-- **Everything is public** : you know what you’re doing
-- **Avoid objects** : use closures
-- **No unnecessary validation** : if something goes wrong, an error will pop
-- **No error catching** : if an error pop, it goes all the way up
-- **No DOM** : jQuery already exists
-- **No plugins** : if a developer wants to add something, he will find a way around
-- **Write good documentation** : document as I code
-- **Promote** : a good library is nothing without users
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5Q2QAJSHP8Y8Y)
 
+You can create [issues](https://github.com/dsimard/timezonedetect/issues).
+
+You can also contribute code :
+
+1. Fork the code on GitHub
+2. Clone your fork in your environment : `git clone git@github.com:USERNAME/undone.git`
+3. Create a branch for your feature : `git checkout -b your_branch_name`
+4. Write and delete code and commit as often as you can : `git commit -am "A descriptive message"`
+5. Push the branch to your fork : `git push origin your_branch_name`
+6. Create a pull request on GitHub (click the __Pull request__ button on your fork page)
+
+## Need more help?
+
+- Create an [issue](https://github.com/dsimard/undone/issues).
+- Write me an email at <dsimard@azanka.ca>

@@ -2,20 +2,16 @@
   var jsk = {
     dids : [],
     undids : [],
-    // Can undo
-    canUndo : function() {
-      return this.dids.length > 0;
-    },
-    // Can Redo
-    canRedo : function() {
-      return this.undids.length > 0;
-    },
-    ///// FUNCTIONS
-    // deprecated : Push an undo function
-    push : function(undoFunction) {
-      this.execute(null, undoFunction);
-    },
-    // Do something that can be undone
+    /*
+     * ### execute(doFunction, undoFunction)
+     *
+     * Execute a function that can be undone
+     *
+     *      var add = function() { alert('Buy a cat'); }
+     *      var remove = function() { alert('Give a cat'); }
+     *      undone.execute(add, remove) 
+     *      // will alert 'Buy a cat'
+    */
     execute : function execute(doFunction, undoFunction, options) {
       // If in async, it will not execute the do when calling redo
       // (see redoFunction)
@@ -49,7 +45,17 @@
 
       return data;
     },
-    // Undo
+    /*
+     * ### undo()
+     *
+     * Undo a executed function called with `execute`
+     *
+     *      var add = function() { alert('Buy a cat'); }
+     *      var remove = function() { alert('Give a cat'); }
+     *      undone.execute(add, remove)
+     *      undone.undo()
+     *      // will alert 'Give a cat'
+    */
     undo : function undo() {
       var fct = this.dids && this.dids.length > 0 ? this.dids.pop() : null;
       if (this.isFct(fct.wrappedUndo)) {
@@ -64,7 +70,18 @@
 
       this.fireEvents();
     },
-    // Redo
+    /*
+     * ### Redo()
+     *
+     * Redo a executed function that was undone
+     *
+     *      var add = function() { alert('Buy a cat'); }
+     *      var remove = function() { alert('Give a cat'); }
+     *      undone.execute(add, remove)
+     *      undone.undo()
+     *      undone.redo()
+     *      // will alert 'Buy a cat'
+    */
     redo : function redo() {
       var fct = this.undids && this.undids.length > 0 ? this.undids.pop() : null;
       if (this.isFct(fct.redo)) {
@@ -87,22 +104,53 @@
       
       this.fireEvents();
     },
-    ///// EVENTS
-    // When there's a change
+    /*
+     * ### canUndo()
+     *
+     * If there are functions to undo
+     *
+     *      undone.canUndo() // returns `false`
+     *      var add = function() { alert('Buy a cat'); }
+     *      var remove = function() { alert('Give a cat'); }
+     *      undone.execute(add, remove)
+     *      undone.canUndo() // returns `true`
+    */
+    canUndo : function() {
+      return this.dids.length > 0;
+    },
+    /*
+     * ### canRedo()
+     *
+     * If there are functions to redo
+     *
+     *      var add = function() { alert('Buy a cat'); }
+     *      var remove = function() { alert('Give a cat'); }
+     *      undone.execute(add, remove)
+     *      undone.canRedo() // returns false
+     *      undone.undo()
+     *      undone.canRedo() // returns true
+    */    
+    canRedo : function() {
+      return this.undids.length > 0;
+    },
+    /*
+     * ### onChange()
+     *
+     * This event is called when there's a change in the executions
+     *
+     *      var changed = function() { alert('There was a change'); }
+     *      undone.onChange = changed;
+     *      undone.execute(add, remove); // alerts 'There was a change'
+     *      undone.undo(); // alerts 'There was a change'
+    */
     onChange : function() {
       return false;
     },
-    // deprecated : when all the do/undo are empty
-    onEmpty : function() {
-      return false;
-    },
-    ///// PRIVATE
     // fired when something changes
     fireEvents : function() {
       if (this.onChange) { this.onChange(); }
-      if (this.dids.length === 0 && this.undids.length === 0) { this.onEmpty(); }
     },
-    // is Function
+    // If 22222is Function
     isFct : function(fct) {
       return fct && typeof fct == "function";
     }
@@ -110,17 +158,19 @@
   
   // Creates the base namespaces
   if (typeof window !== 'undefined') {
+    // Backward compatibility
     if (window.javascriptKataDotCom === undefined) { window.javascriptKataDotCom = {}; }
     if (window.jsKata === undefined) { window.jsKata = window.javascriptKataDotCom; }
     if (window.jskata === undefined) { window.jskata = window.javascriptKataDotCom; }
     if (window.jsk === undefined) { window.jsk = window.javascriptKataDotCom; }
     if (window._  === undefined) { window._ = window.javascriptKataDotCom; }
-      
     window.javascriptKataDotCom.undo = jsk; 
     window.javascriptKataDotCom.u = jsk;
-
-    // Shortcut for backward compatibility
     window.jskataUndo = window.javascriptKataDotCom.undo; 
+    
+    // Assign to undone
+    window.undone = jsk;
+    
   } else if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     module.exports = jsk;
   }

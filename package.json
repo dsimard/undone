@@ -1,13 +1,13 @@
 {
   "author": "dsimard <dsimard@azanka.ca>",
-  "name": "jskata",
-  "description": "independent javascript libraries from JavascriptKata.com",
-  "keywords": ["timezone", "date"],
-  "version": "0.4.0",
+  "name": "undone",
+  "description": "A do, undo and redo library in javascript",
+  "keywords": ["do", "undo", "redo"],
+  "version": "0.0.1",
   "preferGlobal": "false",
   "repository": {
     "type": "git",
-    "url": "git@github.com:dsimard/jskata.git"
+    "url": "git@github.com:dsimard/undone.git"
   },
   "scripts": {
     "test": "node ./node_modules/.bin/mocha --compilers coffee:coffee-script test/*.coffee"
@@ -26,6 +26,6 @@
   "docco_husky": {
     "output_dir": "docco-husky",
     "content_dir": "docs",
-    "project_name": "jskata"
+    "project_name": "undone"
   }
 }

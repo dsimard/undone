@@ -1,65 +1,62 @@
 should = require 'should'
-undo = require '../undone.js'
+undonejs = require '../undone.js'
 {equal, ok} = require 'assert'
-
-jsk = {u:undo, undo:undo}
-_ = jsk
-
+{dir} = console
 
 describe 'Undo', ->
   it "basic test", ->
     executed = false
     undone = false
-    jsk.undo.execute (->
+    undonejs.execute (->
       executed = true
     ), ->
       undone = true
 
     ok executed, "it was executed"
-    equal _.u.dids.length, 1
+    equal undonejs.dids.length, 1
     ok not undone, "it was not undone"
-    equal _.u.undids.length, 0
+    equal undonejs.undids.length, 0
     
     # Undo
-    jsk.undo.undo()
+    undonejs.undo()
     ok undone, "it was undone"
-    equal _.u.dids.length, 0
-    equal _.u.undids.length, 1
+    equal undonejs.dids.length, 0
+    equal undonejs.undids.length, 1
     
     # Redo
-    jsk.undo.redo()
+    undonejs.redo()
     ok undone, "it was redone"
-    equal _.u.dids.length, 1
-    equal _.u.undids.length, 0
+    equal undonejs.dids.length, 1
+    equal undonejs.undids.length, 0
 
   it "onChange", ->
     called = 0
-    jsk.undo.onChange = ->
+    undonejs.onChange = ->
       called++
 
-    jsk.undo.execute (->
+    undonejs.execute (->
     ), ->
 
     equal 1, called, "called 1 time"
-    jsk.undo.undo()
+    undonejs.undo()
     equal 2, called, "called 2 times"
-    jsk.undo.redo()
+    undonejs.redo()
     equal 3, called, "called 3 times"
-    jsk.undo.onChange = null
-    jsk.undo.undo()
+    undonejs.onChange = null
+    undonejs.undo()
     equal 3, called, "called 3 times (the event is now null)"
 
   it "data from execution is passed to undo", ->
     rnd = 0
-    jsk.u.execute (->
+    undonejs.execute (->
       rnd = Math.round(Math.random() * 9999999)
       rnd
     ), (data) ->
       equal data, rnd, "randoms are the same"
 
     oldRnd = rnd
-    jsk.u.undo()
-    jsk.u.redo()
+    undonejs.undo()
+    undonejs.redo()
     ok oldRnd isnt rnd, "rnd has changed"
-    jsk.u.undo()
+    undonejs.undo()
 
