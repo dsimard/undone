@@ -1,7 +1,7 @@
 {
   "author": "dsimard <dsimard@azanka.ca>",
   "name": "undone",
-  "description": "A do, undo and redo library in javascript",
+  "description": "Do, undo and redo library for javascript",
   "keywords": ["do", "undo", "redo"],
   "version": "0.0.1",
   "preferGlobal": "false",

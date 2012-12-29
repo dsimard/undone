@@ -1,6 +1,6 @@
 # Undone
 
-## A do, undo and redo library in javascript
+## Do, undo and redo library for javascript
 
 [![Build Status](https://travis-ci.org/dsimard/timezonedetect.png?branch=master)](https://travis-ci.org/dsimard/timezonedetect)
 
@@ -17,7 +17,7 @@ See the complete documentation in [undone.js](http://dsimard.github.com/undone/u
 To __install for a website__, copy `undone.min.js` with the other javascript files of your project and include it.
 
 
-_(Later)_ To __install in a Node.js__ project `npm install timezonedetect`
+_(Later)_ To __install in a Node.js__ project `npm install undone`
 
 ## Contribute
 
