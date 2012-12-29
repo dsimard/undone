@@ -2,7 +2,7 @@
 
 ## Do, undo and redo library for javascript
 
-[![Build Status](https://travis-ci.org/dsimard/timezonedetect.png?branch=master)](https://travis-ci.org/dsimard/timezonedetect)
+[![Build Status](https://travis-ci.org/dsimard/undone.png?branch=master)](https://travis-ci.org/dsimard/undone)
 
     var add = function() { alert('Buy a cat'); }
     var remove = function() { alert('Give a cat'); }
