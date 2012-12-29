@@ -5,15 +5,15 @@ fs = require 'fs'
 {minify} = require './node_modules/uglify-js'
 
 generateDoc = (pushDoc=true, done)->
-  dir = path.resolve './'
+  directory = path.resolve './'
   
-  # Create a tmp directory
+  # Create a tmp directoryectory
   exec 'mktemp -d', (err, stdout, stderr)->
     error err if err?
     tmp = stdout.replace(/^\s*|\s*$/g, '') 
     
-    # clone the git in that temp dir
-    exec "git clone #{dir} #{tmp}", (err, stdout, stderr)->
+    # clone the git in that temp directory
+    exec "git clone #{directory} #{tmp}", (err, stdout, stderr)->
       error err if err?
       log stdout
       
@@ -27,8 +27,8 @@ generateDoc = (pushDoc=true, done)->
           error err if err?
           log stdout
           
-          # Move the doc to the tmp dir
-          exec "cp #{dir}/docco-husky/* #{tmp} -r", (err, stdout, stderr)->
+          # Move the doc to the tmp directory
+          exec "cp #{directory}/docco-husky/* #{tmp} -r", (err, stdout, stderr)->
             error err if err?
             log stdout
             
@@ -44,7 +44,7 @@ generateDoc = (pushDoc=true, done)->
                   log stdout
 
 task 'uglify', 'Uglify js file', ->
-  fs.readdir path.resolve('./'), (err, files)->
+  fs.readdirectory path.resolve('./'), (err, files)->
     files.forEach (file)->
       if path.extname(file) == '.js' && file.indexOf('.min') < 0
         ugly = minify file    
