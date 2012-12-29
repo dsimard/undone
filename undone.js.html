@@ -1,0 +1,141 @@
+<!DOCTYPE html><html><head><title>undone.js</title><meta http-equiv="Content-Type" content="text/html" charset="UTF-8"><link rel="stylesheet" media="all" href="./docco.css"></head><body><div id="container"><div id="background"></div><div id="jump_to">Jump To &hellip;<div id="jump_wrapper"><div id="jump_page"><a href="./index.html" class="source"><span class="file_name">README</span></a><a href="./undone.js.html" class="source selected"><span class="base_path">. / </span><span class="file_name">undone.js</span></a></div></div></div><table cellpadding="0" cellspacing="0"><thead><tr><th class="docs"><h1>undone.js</h1><div class="filepath">./</div></th><th class="code"></th></tr></thead><tbody><tr id="section-1"><td class="docs"><div class="pilwrap"><a href="#section-1" class="pilcrow">&#182;</a></div>
+</td><td class="code"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">jsk</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">dids</span> <span class="o">:</span> <span class="p">[],</span>
+    <span class="nx">undids</span> <span class="o">:</span> <span class="p">[],</span></pre></div></td></tr><tr id="section-2"><td class="docs"><div class="pilwrap"><a href="#section-2" class="pilcrow">&#182;</a></div><div class="dox"><div class="summary"><h3>execute(doFunction, undoFunction)</h3></div><div class="body"><p>Execute a function that can be undone</p>
+
+<pre><code> var add = function() { alert('Buy a cat'); }
+ var remove = function() { alert('Give a cat'); }
+ undone.execute(add, remove) 
+ // will alert 'Buy a cat'
+</code></pre></div></div>
+</td><td class="code"><div class="highlight"><pre>    <span class="nx">execute</span> <span class="o">:</span> <span class="kd">function</span> <span class="nx">execute</span><span class="p">(</span><span class="nx">doFunction</span><span class="p">,</span> <span class="nx">undoFunction</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span></pre></div></td></tr><tr id="section-3"><td class="docs"><div class="pilwrap"><a href="#section-3" class="pilcrow">&#182;</a></div><p>If in async, it will not execute the do when calling redo
+(see redoFunction)</p>
+</td><td class="code"><div class="highlight"><pre>      <span class="kd">var</span> <span class="nx">data</span><span class="p">;</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="nx">options</span> <span class="o">===</span> <span class="kc">undefined</span> <span class="o">||</span> <span class="nx">options</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span> <span class="p">}</span>
+      
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isFct</span><span class="p">(</span><span class="nx">doFunction</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">async</span> <span class="o">!==</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span> 
+        <span class="nx">data</span> <span class="o">=</span> <span class="nx">doFunction</span><span class="p">();</span>
+      <span class="p">}</span></pre></div></td></tr><tr id="section-4"><td class="docs"><div class="pilwrap"><a href="#section-4" class="pilcrow">&#182;</a></div><p>This causes me problem on async
+TODO : This is not thread safe but I didn't find yet how to do it</p>
+</td><td class="code"><div class="highlight"><pre>      <span class="k">if</span> <span class="p">(</span><span class="nx">jsk</span><span class="p">.</span><span class="nx">isInAsyncRedo</span> <span class="o">!==</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">undids</span> <span class="o">=</span> <span class="p">[];</span>
+      <span class="p">}</span>
+      <span class="nx">jsk</span><span class="p">.</span><span class="nx">isInAsyncRedo</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> </pre></div></td></tr><tr id="section-5"><td class="docs"><div class="pilwrap"><a href="#section-5" class="pilcrow">&#182;</a></div><p>If there's data in options, use them</p>
+</td><td class="code"><div class="highlight"><pre>      <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span> <span class="p">}</span></pre></div></td></tr><tr id="section-6"><td class="docs"><div class="pilwrap"><a href="#section-6" class="pilcrow">&#182;</a></div><p>Create a new undo and pass what the do returned</p>
+</td><td class="code"><div class="highlight"><pre>      <span class="kd">var</span> <span class="nx">wrappedUndo</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">wrappedUndo</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">undoFunction</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+      <span class="p">};</span>
+
+      <span class="k">this</span><span class="p">.</span><span class="nx">dids</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">redo</span><span class="o">:</span><span class="nx">doFunction</span><span class="p">,</span> <span class="nx">undo</span><span class="o">:</span><span class="nx">undoFunction</span><span class="p">,</span> 
+        <span class="nx">wrappedUndo</span><span class="o">:</span><span class="nx">wrappedUndo</span><span class="p">,</span> <span class="nx">options</span><span class="o">:</span><span class="nx">options</span><span class="p">});</span>
+
+      <span class="k">this</span><span class="p">.</span><span class="nx">fireEvents</span><span class="p">();</span>
+
+      <span class="k">return</span> <span class="nx">data</span><span class="p">;</span>
+    <span class="p">},</span></pre></div></td></tr><tr id="section-7"><td class="docs"><div class="pilwrap"><a href="#section-7" class="pilcrow">&#182;</a></div><div class="dox"><div class="summary"><h3>undo()</h3></div><div class="body"><p>Undo a executed function called with <code>execute</code></p>
+
+<pre><code> var add = function() { alert('Buy a cat'); }
+ var remove = function() { alert('Give a cat'); }
+ undone.execute(add, remove)
+ undone.undo()
+ // will alert 'Give a cat'
+</code></pre></div></div>
+</td><td class="code"><div class="highlight"><pre>    <span class="nx">undo</span> <span class="o">:</span> <span class="kd">function</span> <span class="nx">undo</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">fct</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dids</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">dids</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">dids</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isFct</span><span class="p">(</span><span class="nx">fct</span><span class="p">.</span><span class="nx">wrappedUndo</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">fct</span><span class="p">.</span><span class="nx">wrappedUndo</span><span class="p">();</span>
+        </pre></div></td></tr><tr id="section-8"><td class="docs"><div class="pilwrap"><a href="#section-8" class="pilcrow">&#182;</a></div><p>There can be no "do" so don't push a redo</p>
+</td><td class="code"><div class="highlight"><pre>        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isFct</span><span class="p">(</span><span class="nx">fct</span><span class="p">.</span><span class="nx">redo</span><span class="p">))</span> <span class="p">{</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">undids</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">redo</span><span class="o">:</span><span class="nx">fct</span><span class="p">.</span><span class="nx">redo</span><span class="p">,</span> <span class="nx">undo</span><span class="o">:</span><span class="nx">fct</span><span class="p">.</span><span class="nx">undo</span><span class="p">,</span> 
+          <span class="nx">options</span> <span class="o">:</span> <span class="nx">fct</span><span class="p">.</span><span class="nx">options</span><span class="p">});</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+
+      <span class="k">this</span><span class="p">.</span><span class="nx">fireEvents</span><span class="p">();</span>
+    <span class="p">},</span></pre></div></td></tr><tr id="section-9"><td class="docs"><div class="pilwrap"><a href="#section-9" class="pilcrow">&#182;</a></div><div class="dox"><div class="summary"><h3>Redo()</h3></div><div class="body"><p>Redo a executed function that was undone</p>
+
+<pre><code> var add = function() { alert('Buy a cat'); }
+ var remove = function() { alert('Give a cat'); }
+ undone.execute(add, remove)
+ undone.undo()
+ undone.redo()
+ // will alert 'Buy a cat'
+</code></pre></div></div>
+</td><td class="code"><div class="highlight"><pre>    <span class="nx">redo</span> <span class="o">:</span> <span class="kd">function</span> <span class="nx">redo</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">fct</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">undids</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">undids</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">undids</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isFct</span><span class="p">(</span><span class="nx">fct</span><span class="p">.</span><span class="nx">redo</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">jsk</span><span class="p">.</span><span class="nx">isInAsyncRedo</span> <span class="o">=</span> <span class="nx">fct</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">async</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">fct</span><span class="p">.</span><span class="nx">redo</span><span class="p">();</span>
+        </pre></div></td></tr><tr id="section-10"><td class="docs"><div class="pilwrap"><a href="#section-10" class="pilcrow">&#182;</a></div><p>If there's data in options, use them</p>
+</td><td class="code"><div class="highlight"><pre>        <span class="k">if</span> <span class="p">(</span><span class="nx">fct</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">fct</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span> <span class="p">}</span>
+        
+        <span class="kd">var</span> <span class="nx">wrappedUndo</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">wrappedUndo</span><span class="p">()</span> <span class="p">{</span>
+          <span class="nx">fct</span><span class="p">.</span><span class="nx">undo</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+        <span class="p">};</span>
+        </pre></div></td></tr><tr id="section-11"><td class="docs"><div class="pilwrap"><a href="#section-11" class="pilcrow">&#182;</a></div><p>Put the redo in dids (if in async, skip this)</p>
+</td><td class="code"><div class="highlight"><pre>        <span class="k">if</span> <span class="p">(</span><span class="nx">fct</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">async</span> <span class="o">!==</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">dids</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">redo</span><span class="o">:</span><span class="nx">fct</span><span class="p">.</span><span class="nx">redo</span><span class="p">,</span><span class="nx">undo</span><span class="o">:</span><span class="nx">fct</span><span class="p">.</span><span class="nx">undo</span><span class="p">,</span>
+            <span class="nx">wrappedUndo</span><span class="o">:</span><span class="nx">wrappedUndo</span><span class="p">,</span> <span class="nx">options</span><span class="o">:</span><span class="nx">fct</span><span class="p">.</span><span class="nx">options</span><span class="p">});</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      
+      <span class="k">this</span><span class="p">.</span><span class="nx">fireEvents</span><span class="p">();</span>
+    <span class="p">},</span></pre></div></td></tr><tr id="section-12"><td class="docs"><div class="pilwrap"><a href="#section-12" class="pilcrow">&#182;</a></div><div class="dox"><div class="summary"><h3>canUndo()</h3></div><div class="body"><p>If there are functions to undo</p>
+
+<pre><code> undone.canUndo() // returns `false`
+ var add = function() { alert('Buy a cat'); }
+ var remove = function() { alert('Give a cat'); }
+ undone.execute(add, remove)
+ undone.canUndo() // returns `true`
+</code></pre></div></div>
+</td><td class="code"><div class="highlight"><pre>    <span class="nx">canUndo</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">dids</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">},</span></pre></div></td></tr><tr id="section-13"><td class="docs"><div class="pilwrap"><a href="#section-13" class="pilcrow">&#182;</a></div><div class="dox"><div class="summary"><h3>canRedo()</h3></div><div class="body"><p>If there are functions to redo</p>
+
+<pre><code> var add = function() { alert('Buy a cat'); }
+ var remove = function() { alert('Give a cat'); }
+ undone.execute(add, remove)
+ undone.canRedo() // returns false
+ undone.undo()
+ undone.canRedo() // returns true
+</code></pre></div></div>
+</td><td class="code"><div class="highlight"><pre>    <span class="nx">canRedo</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">undids</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">},</span></pre></div></td></tr><tr id="section-14"><td class="docs"><div class="pilwrap"><a href="#section-14" class="pilcrow">&#182;</a></div><div class="dox"><div class="summary"><h3>onChange()</h3></div><div class="body"><p>This event is called when there's a change in the executions</p>
+
+<pre><code> var changed = function() { alert('There was a change'); }
+ undone.onChange = changed;
+ undone.execute(add, remove); // alerts 'There was a change'
+ undone.undo(); // alerts 'There was a change'
+</code></pre></div></div>
+</td><td class="code"><div class="highlight"><pre>    <span class="nx">onChange</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">},</span></pre></div></td></tr><tr id="section-15"><td class="docs"><div class="pilwrap"><a href="#section-15" class="pilcrow">&#182;</a></div><p>fired when something changes</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nx">fireEvents</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onChange</span><span class="p">)</span> <span class="p">{</span> <span class="k">this</span><span class="p">.</span><span class="nx">onChange</span><span class="p">();</span> <span class="p">}</span>
+    <span class="p">},</span></pre></div></td></tr><tr id="section-16"><td class="docs"><div class="pilwrap"><a href="#section-16" class="pilcrow">&#182;</a></div><p>If 22222is Function</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nx">isFct</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fct</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">fct</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">fct</span> <span class="o">==</span> <span class="s2">&quot;function&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+  </pre></div></td></tr><tr id="section-17"><td class="docs"><div class="pilwrap"><a href="#section-17" class="pilcrow">&#182;</a></div><p>Creates the base namespaces</p>
+</td><td class="code"><div class="highlight"><pre>  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nb">window</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span></pre></div></td></tr><tr id="section-18"><td class="docs"><div class="pilwrap"><a href="#section-18" class="pilcrow">&#182;</a></div><p>Backward compatibility</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">javascriptKataDotCom</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span> <span class="nb">window</span><span class="p">.</span><span class="nx">javascriptKataDotCom</span> <span class="o">=</span> <span class="p">{};</span> <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">jsKata</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span> <span class="nb">window</span><span class="p">.</span><span class="nx">jsKata</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">javascriptKataDotCom</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">jskata</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span> <span class="nb">window</span><span class="p">.</span><span class="nx">jskata</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">javascriptKataDotCom</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">jsk</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span> <span class="nb">window</span><span class="p">.</span><span class="nx">jsk</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">javascriptKataDotCom</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">_</span>  <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span> <span class="nb">window</span><span class="p">.</span><span class="nx">_</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">javascriptKataDotCom</span><span class="p">;</span> <span class="p">}</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">javascriptKataDotCom</span><span class="p">.</span><span class="nx">undo</span> <span class="o">=</span> <span class="nx">jsk</span><span class="p">;</span> 
+    <span class="nb">window</span><span class="p">.</span><span class="nx">javascriptKataDotCom</span><span class="p">.</span><span class="nx">u</span> <span class="o">=</span> <span class="nx">jsk</span><span class="p">;</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">jskataUndo</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">javascriptKataDotCom</span><span class="p">.</span><span class="nx">undo</span><span class="p">;</span> 
+    </pre></div></td></tr><tr id="section-19"><td class="docs"><div class="pilwrap"><a href="#section-19" class="pilcrow">&#182;</a></div><p>Assign to undone</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nb">window</span><span class="p">.</span><span class="nx">undone</span> <span class="o">=</span> <span class="nx">jsk</span><span class="p">;</span>
+    
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">module</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">jsk</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">})();</span>
+
+</pre></div></td></tr></tbody></table><div id="generated">generated Fri Dec 28 2012 21:06:21 GMT-0500 (EST)  </div><div id="projectname"><a href="./index.html">undone</a></div></div></body></html>

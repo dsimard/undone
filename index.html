@@ -1,0 +1,57 @@
+<!DOCTYPE html><html><head><title>README</title><meta http-equiv="Content-Type" content="text/html" charset="UTF-8"><link rel="stylesheet" media="all" href="./docco.css"></head><body><div id="container"><div id="background"></div><div id="jump_to">Jump To &hellip;<div id="jump_wrapper"><div id="jump_page"><a href="./index.html" class="source"><span class="file_name">README</span></a><a href="./undone.js.html" class="source "><span class="base_path">. / </span><span class="file_name">undone.js</span></a></div></div></div><table cellpadding="0" cellspacing="0"><thead><tr><th class="docs"></th><th class="code"></th></tr></thead><tbody><tr id="section"><td class="docs"><h1>undone
+</h1><p>A do, undo and redo library in javascript</p><h2>Documentation</h2>
+
+<p><a href="undone.js.html">Undone.js</a></p>
+<h3>Version</h3><p>0.0.1</p><h3>Author</h3><p><span class="gravatar"><img src="http://www.gravatar.com/avatar/974319b5337d4e023d670b2431037f7d"/><span>dsimard &lt;dsimard@azanka.ca&gt;</span></span></p><h3>Repository</h3><p>git - git@github.com:dsimard/undone.git</p><h3>Dependencies </h3><ul></ul><p><h3>Stats</h3><pre class="code_stats">
+http://cloc.sourceforge.net v 1.55  T=0.5 s (2.0 files/s, 354.0 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Javascript                       1             17             80             80
+-------------------------------------------------------------------------------
+</pre></p></td><td id="content" class="code"><h1>Undone</h1>
+
+<h2>A do, undo and redo library in javascript</h2>
+
+<p><a href="https://travis-ci.org/dsimard/timezonedetect"><img src="https://travis-ci.org/dsimard/timezonedetect.png?branch=master" alt="Build Status" title="" /></a></p>
+
+<pre><code>var add = function() { alert('Buy a cat'); }
+var remove = function() { alert('Give a cat'); }
+undone.execute(add, remove); // Alerts 'Buy a cat'
+undone.undo(); // Alerts 'Give a cat'
+undone.redo(); // Alerts 'Buy a cat'
+</code></pre>
+
+<p>See the complete documentation in <a href="http://dsimard.github.com/undone/undone.js.html">undone.js</a></p>
+
+<h2>Install</h2>
+
+<p>To <strong>install for a website</strong>, copy <code>undone.min.js</code> with the other javascript files of your project and include it.</p>
+
+<p><em>(Later)</em> To <strong>install in a Node.js</strong> project <code>npm install timezonedetect</code></p>
+
+<h2>Contribute</h2>
+
+<p>Give what you want to contribute to open-source : </p>
+
+<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=5Q2QAJSHP8Y8Y"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" alt="Donate" title="" /></a></p>
+
+<p>You can create <a href="https://github.com/dsimard/timezonedetect/issues">issues</a>.</p>
+
+<p>You can also contribute code :</p>
+
+<ol>
+<li>Fork the code on GitHub</li>
+<li>Clone your fork in your environment : <code>git clone git@github.com:USERNAME/undone.git</code></li>
+<li>Create a branch for your feature : <code>git checkout -b your_branch_name</code></li>
+<li>Write and delete code and commit as often as you can : <code>git commit -am "A descriptive message"</code></li>
+<li>Push the branch to your fork : <code>git push origin your_branch_name</code></li>
+<li>Create a pull request on GitHub (click the <strong>Pull request</strong> button on your fork page)</li>
+</ol>
+
+<h2>Need more help?</h2>
+
+<ul>
+<li>Create an <a href="https://github.com/dsimard/undone/issues">issue</a>.</li>
+<li>Write me an email at <a href="&#109;&#x61;i&#x6C;&#116;&#x6F;:&#x64;&#115;&#x69;&#x6D;&#97;&#x72;&#x64;&#x40;&#97;&#122;&#97;n&#x6B;&#97;&#46;&#99;&#97;">&#x64;&#115;&#x69;&#x6D;&#97;&#x72;&#x64;&#x40;&#97;&#122;&#97;n&#x6B;&#97;&#46;&#99;&#97;</a></li>
+</ul>  </td></tr></tbody></table><div id="generated">generated Fri Dec 28 2012 21:06:21 GMT-0500 (EST)  </div><div id="projectname"><a href="./index.html">undone</a></div></div></body></html>
