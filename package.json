@@ -3,8 +3,8 @@
   "name": "undone",
   "description": "Do, undo and redo library for javascript",
   "keywords": ["do", "undo", "redo"],
-  "version": "0.0.1",
-  "preferGlobal": "false",
+  "version": "0.4.0",
+  "main": "./undone.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:dsimard/undone.git"
@@ -20,6 +20,7 @@
     "coffee-script" : "latest",
     "uglify-js" : "latest"
   },
+  "license" : "MIT", 
   "engines": {
     "node": "*"
   },
