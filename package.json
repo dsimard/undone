@@ -2,7 +2,11 @@
   "author": "dsimard <dsimard@azanka.ca>",
   "name": "undone",
   "description": "Do, undo and redo library for javascript",
-  "keywords": ["do", "undo", "redo"],
+  "keywords": [
+    "do",
+    "undo",
+    "redo"
+  ],
   "version": "0.4.0",
   "main": "./undone.js",
   "repository": {
@@ -13,14 +17,15 @@
     "test": "node ./node_modules/.bin/mocha --compilers coffee:coffee-script test/*.coffee"
   },
   "dependencies": {
+    "mocha": "~1.13.0"
   },
   "devDependencies": {
-    "mocha"   : "~1.0.3",
-    "should"  : "~0.6.3",
-    "coffee-script" : "latest",
-    "uglify-js" : "latest"
+    "mocha": "~1.0.3",
+    "should": "~0.6.3",
+    "coffee-script": "latest",
+    "uglify-js": "latest"
   },
-  "license" : "MIT", 
+  "license": "MIT",
   "engines": {
     "node": "*"
   },
